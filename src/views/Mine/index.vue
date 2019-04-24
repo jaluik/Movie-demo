@@ -1,6 +1,7 @@
 <template>
     <div>
         <Header title='我的电影'/>
+        <Login />
         <TabBar />       
     </div>
 </template>
@@ -9,12 +10,15 @@
 
 import Header from '@/components/Header'
 import TabBar from '@/components/TabBar'
+import Login from '@/components/Login'
+
 
 export default {
     name:'Mine',
     components:{
         Header,
-        TabBar
+        TabBar,
+        Login
     }
 }
 </script>
