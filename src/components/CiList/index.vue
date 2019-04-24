@@ -1,97 +1,80 @@
 <template>
     <div class="cinema_body">
         <ul>
-            <li>
+            <li v-for ="cinema in cinemaList">
                 <div>
-                    <span>大地影院(澳东世纪店)</span>
-                    <span class="q"><span class="price">22.9</span> 元起</span>
+                    <span>{{cinema.nm}}</span>
+                    <span class="q"><span class="price">{{cinema.sellPrice}}</span> 元起</span>
                 </div>
                 <div class="address">
-                    <span>金州区大连经济技术开发区澳东世纪3层</span>
-                    <span>1763.5km</span>
+                    <span>{{cinema.addr}}</span>
+                    <span>{{cinema.distance}}</span>
                 </div>
                 <div class="card">
-                    <div>小吃</div>
-                    <div>折扣卡</div>
+                    <div  v-for="(value,key) in cinema.tag" v-if="value==1" :class = "key | formatClass">{{key | formatCard}}</div>
                 </div>
             </li>
-            <li>
-                <div>
-                    <span>大地影院(澳东世纪店)</span>
-                    <span class="q"><span class="price">22.9</span> 元起</span>
-                </div>
-                <div class="address">
-                    <span>金州区大连经济技术开发区澳东世纪3层</span>
-                    <span>1763.5km</span>
-                </div>
-                <div class="card">
-                    <div>小吃</div>
-                    <div>折扣卡</div>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <span>大地影院(澳东世纪店)</span>
-                    <span class="q"><span class="price">22.9</span> 元起</span>
-                </div>
-                <div class="address">
-                    <span>金州区大连经济技术开发区澳东世纪3层</span>
-                    <span>1763.5km</span>
-                </div>
-                <div class="card">
-                    <div>小吃</div>
-                    <div>折扣卡</div>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <span>大地影院(澳东世纪店)</span>
-                    <span class="q"><span class="price">22.9</span> 元起</span>
-                </div>
-                <div class="address">
-                    <span>金州区大连经济技术开发区澳东世纪3层</span>
-                    <span>1763.5km</span>
-                </div>
-                <div class="card">
-                    <div>小吃</div>
-                    <div>折扣卡</div>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <span>大地影院(澳东世纪店)</span>
-                    <span class="q"><span class="price">22.9</span> 元起</span>
-                </div>
-                <div class="address">
-                    <span>金州区大连经济技术开发区澳东世纪3层</span>
-                    <span>1763.5km</span>
-                </div>
-                <div class="card">
-                    <div>小吃</div>
-                    <div>折扣卡</div>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <span>大地影院(澳东世纪店)</span>
-                    <span class="q"><span class="price">22.9</span> 元起</span>
-                </div>
-                <div class="address">
-                    <span>金州区大连经济技术开发区澳东世纪3层</span>
-                    <span>1763.5km</span>
-                </div>
-                <div class="card">
-                    <div>小吃</div>
-                    <div>折扣卡</div>
-                </div>
-            </li>
+
         </ul>
     </div>
 </template>
 
 <script>
 export default {
-    name : 'CiList'
+    name : 'CiList',
+    data() {
+        return {
+            cinemaList:[],
+        }
+    },
+    mounted() {
+        this.axios.get('/api/cinemaList?cityId=10').then((res) => {
+            if(res.data.msg == 'ok'){
+                this.cinemaList = res.data.data.cinemas
+            }
+        })
+    },
+    filters:{
+        
+        formatCard(key){
+            var data = [
+                {key :"allowRefund", card : "改签"},
+                {key :"sell", card : "折扣卡"},
+                {key :"endorse", card : "退"},
+                {key :"snack", card : "小吃"},
+            ];
+
+            for(var i = 0; i < data.length; i ++){
+                if(data[i].key == key){
+                    console.log(1);
+                    
+                    
+                    return data[i].card
+                }
+            }
+            return ""
+        },
+        formatClass(key){
+                       var data = [
+                {key :"allowRefund", card : "or"},
+                {key :"sell", card : "bl"},
+                {key :"endorse", card : "or"},
+                {key :"snack", card : "bl"},
+            ];
+
+            for(var i = 0; i < data.length; i ++){
+                if(data[i].key == key){
+                    console.log(1);
+                    
+                    
+                    return data[i].card
+                }
+            }
+            return ""
+
+        }
+
+    }
 }
 </script>
 
