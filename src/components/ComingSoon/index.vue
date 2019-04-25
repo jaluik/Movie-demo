@@ -1,7 +1,7 @@
 <template>
     <div class="movie_body">
-        <scroller>
         <loading v-if="isLoading"></loading>
+        <scroller>
         <ul>
             <li v-for="item in comingList" :key = "item.id">
                 <div class="pic_show"><img :src="item.img | setWH('128.180')"></div>
