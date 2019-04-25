@@ -30,12 +30,13 @@
             return {
                 message:'',
                 movieList:[],
-                timer:{}
+               
             }
         },
         methods:{
             search(){
-                this.axios.get('/api/searchList?cityId=10&kw=' + this.message).then((res)=>{
+                var cityId = this.$store.state.city.id
+                this.axios.get('/api/searchList?cityId='+cityId+'&kw=' + this.message).then((res)=>{
                     if(res.data.msg == "ok"){
                         this.movieList =res.data.data.movies.list
                     }

@@ -1,7 +1,9 @@
 <template>
     <div class="cinema_body">
+        <loading v-if="isLoading"></loading>
+        <scroller v-else>
         <ul>
-            <li v-for ="cinema in cinemaList">
+            <li v-for ="cinema in cinemaList" :key="cinema.id">
                 <div>
                     <span>{{cinema.nm}}</span>
                     <span class="q"><span class="price">{{cinema.sellPrice}}</span> 元起</span>
@@ -11,11 +13,13 @@
                     <span>{{cinema.distance}}</span>
                 </div>
                 <div class="card">
-                    <div  v-for="(value,key) in cinema.tag" v-if="value==1" :class = "key | formatClass">{{key | formatCard}}</div>
+                    <div  v-for="(value,key) in cinema.tag" v-if="value==1" :class = "key | formatClass" :key="key">{{key | formatCard}}</div>
                 </div>
             </li>
 
         </ul>
+        </scroller>
+
     </div>
 </template>
 
@@ -25,13 +29,20 @@ export default {
     data() {
         return {
             cinemaList:[],
+            isLoading: true,
+            preMovieId: -1
+            
         }
     },
-    mounted() {
-        this.axios.get('/api/cinemaList?cityId=10').then((res) => {
+    activated() {
+        var cityId = this.$store.state.city.id
+        if(this.preMovieId == cityId ){return}
+        this.axios.get('/api/cinemaList?cityId='+cityId).then((res) => {
             if(res.data.msg == 'ok'){
                 this.cinemaList = res.data.data.cinemas
             }
+            this.isLoading = false
+            this.preMovieId = cityId
         })
     },
     filters:{
@@ -45,10 +56,7 @@ export default {
             ];
 
             for(var i = 0; i < data.length; i ++){
-                if(data[i].key == key){
-                    console.log(1);
-                    
-                    
+                if(data[i].key == key){                  
                     return data[i].card
                 }
             }
@@ -63,10 +71,7 @@ export default {
             ];
 
             for(var i = 0; i < data.length; i ++){
-                if(data[i].key == key){
-                    console.log(1);
-                    
-                    
+                if(data[i].key == key){                   
                     return data[i].card
                 }
             }
